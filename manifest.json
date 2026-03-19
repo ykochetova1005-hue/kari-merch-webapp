@@ -1,0 +1,16 @@
+{
+  "name": "kari Мерчендайзинг",
+  "short_name": "kari Merch",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#A01671",
+  "icons": [
+    {
+      "src": "kari_logo_vert.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
