@@ -7,7 +7,7 @@
   "theme_color": "#A01671",
   "icons": [
     {
-      "src": "kari_logo_vert.png",
+      "src": "karik.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
