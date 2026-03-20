@@ -39,6 +39,60 @@
     margin-top: 4px;
   }
 
+  .search-box {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+    color: var(--tg-theme-text-color, #1a1a1a);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input:focus {
+    border-color: #A01671;
+  }
+
+  .search-box input::placeholder {
+    color: var(--tg-theme-hint-color, #aaa);
+  }
+
+  .search-box .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--tg-theme-hint-color, #aaa);
+    pointer-events: none;
+  }
+
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-results .sub-item {
+    display: flex;
+  }
+
+  .search-result-section {
+    font-size: 11px;
+    color: var(--tg-theme-hint-color, #999);
+    font-weight: 400;
+    margin-left: auto;
+    padding-left: 8px;
+    white-space: nowrap;
+  }
+
   .menu-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -167,7 +221,12 @@
     <h1>Мерчендайзинг</h1>
     <p>Выберите раздел</p>
   </div>
-  <div class="menu-grid">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Поиск документа..." oninput="onSearch(this.value)">
+  </div>
+  <div id="search-results" class="search-results hidden"></div>
+  <div id="menu-grid" class="menu-grid">
     <a class="menu-btn btn-bulletin" href="https://cloud.kari.com/index.php/s/SmRX3APzGcFc84W" target="_blank">
       <span class="icon">📰</span>
       <span class="label">Бюллетень</span>
@@ -268,14 +327,75 @@
 </div>
 
 <script>
-  // Initialize Telegram Web App
+  // Initialize Telegram Web App — fullscreen
   const tg = window.Telegram && window.Telegram.WebApp;
   if (tg) {
     tg.ready();
     tg.expand();
+    if (tg.requestFullscreen) tg.requestFullscreen();
+    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+  }
+
+  // Search data — all items with labels, sections and URLs
+  const searchData = [
+    { label: 'Бюллетень', section: '', url: 'https://cloud.kari.com/index.php/s/SmRX3APzGcFc84W', icon: '📰' },
+    { label: 'Сезонные инструкции', section: 'Витрины', url: 'https://cloud.kari.com/index.php/s/wDcNPpQK3D7Caog', icon: '📅' },
+    { label: 'Регламент витрин', section: 'Витрины', url: 'https://cloud.kari.com/index.php/s/6Dwke3aa7x76jFz', icon: '📋' },
+    { label: 'Акции', section: '', url: 'https://cloud.kari.com/index.php/s/5jbesD3fMK5QXKo', icon: '🏷️' },
+    { label: 'POSM', section: '', url: 'https://cloud.kari.com/index.php/s/8Pj2mmnfrJDxE8d', icon: '🎯' },
+    { label: 'Kari Home', section: 'Регламенты', url: 'https://cloud.kari.com/index.php/s/N7H7EzzpdsYfTSM', icon: '🏠' },
+    { label: 'Kari Cosmetics', section: 'Регламенты', url: 'https://cloud.kari.com/index.php/s/QZYMRtfnd5SpEak', icon: '💅' },
+    { label: 'Kari Sport', section: 'Регламенты', url: 'https://cloud.kari.com/index.php/s/W92mBbrxCBkMfJH', icon: '🏃' },
+    { label: 'Одежда', section: 'Регламенты', url: 'https://cloud.kari.com/index.php/s/TDRr6QX9xC2Rwxd', icon: '👔' },
+    { label: 'Флеш-коллекции', section: 'Регламенты', url: 'https://cloud.kari.com/index.php/s/cwoiPjik5JFqYqY', icon: '⚡' },
+    { label: 'Фотоотчет', section: 'Регламенты', url: 'https://cloud.kari.com/index.php/s/EpX7EpZs9BYpRX5', icon: '📸' },
+    { label: 'Касса', section: 'Планограммы', url: 'https://cloud.kari.com/index.php/s/MsPE6LzmPB2c7PD', icon: '💳' },
+    { label: 'G13', section: 'Планограммы', url: 'https://cloud.kari.com/index.php/s/wJpGi6tK4AG7war', icon: '📦' },
+    { label: 'Miniso', section: 'Планограммы', url: 'https://cloud.kari.com/index.php/s/bqHLQYMgGcj4TpZ', icon: '🛒' },
+    { label: 'АСС стойки', section: 'Планограммы', url: 'https://cloud.kari.com/index.php/s/z3Hbsq3eKrrdCMQ', icon: '🗂' },
+    { label: 'АСС стеллажи островные', section: 'Планограммы', url: 'https://cloud.kari.com/index.php/s/YJyodZDnSKNtwJg', icon: '🗂' },
+    { label: 'АСС стеллажи пристенные', section: 'Планограммы', url: 'https://cloud.kari.com/index.php/s/eLgetaL2kjxtSWR', icon: '🗂' },
+  ];
+
+  function onSearch(query) {
+    const resultsEl = document.getElementById('search-results');
+    const gridEl = document.getElementById('menu-grid');
+    query = query.trim().toLowerCase();
+
+    if (!query) {
+      resultsEl.classList.add('hidden');
+      resultsEl.innerHTML = '';
+      gridEl.classList.remove('hidden');
+      return;
+    }
+
+    const matches = searchData.filter(item =>
+      item.label.toLowerCase().includes(query) ||
+      item.section.toLowerCase().includes(query)
+    );
+
+    gridEl.classList.add('hidden');
+    resultsEl.classList.remove('hidden');
+
+    if (matches.length === 0) {
+      resultsEl.innerHTML = '<div style="text-align:center;color:#999;padding:20px;">Ничего не найдено</div>';
+      return;
+    }
+
+    resultsEl.innerHTML = matches.map(item =>
+      '<a class="sub-item" href="' + item.url + '" target="_blank">' +
+        '<span class="sub-icon">' + item.icon + '</span> ' +
+        item.label +
+        (item.section ? '<span class="search-result-section">' + item.section + '</span>' : '') +
+        '<span class="arrow">›</span>' +
+      '</a>'
+    ).join('');
   }
 
   function showSub(id) {
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').classList.add('hidden');
+    document.getElementById('search-results').innerHTML = '';
     document.getElementById('main-menu').classList.add('hidden');
     document.querySelectorAll('[id^="sub-"]').forEach(el => el.classList.add('hidden'));
     document.getElementById('sub-' + id).classList.remove('hidden');
