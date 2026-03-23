@@ -400,11 +400,13 @@
     document.getElementById('main-menu').classList.add('hidden');
     document.querySelectorAll('[id^="sub-"]').forEach(el => el.classList.add('hidden'));
     document.getElementById('sub-' + id).classList.remove('hidden');
+    window.scrollTo(0, 0);
   }
 
   function showMain() {
     document.querySelectorAll('[id^="sub-"]').forEach(el => el.classList.add('hidden'));
     document.getElementById('main-menu').classList.remove('hidden');
+    window.scrollTo(0, 0);
   }
 </script>
 </body>
