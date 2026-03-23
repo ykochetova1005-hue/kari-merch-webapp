@@ -152,8 +152,9 @@
   .back-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 10px 16px;
+    padding: 12px 16px;
     border-radius: 10px;
     border: none;
     background: var(--tg-theme-secondary-bg-color, #f0f0f0);
@@ -161,7 +162,8 @@
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    margin-bottom: 14px;
+    margin-top: 16px;
+    width: 100%;
   }
 
   .back-btn:active { opacity: 0.7; }
@@ -255,7 +257,6 @@
 
 <!-- SUBMENU: Витрины -->
 <div id="sub-vitriny" class="hidden">
-  <button class="back-btn" onclick="showMain()">← Назад</button>
   <div class="submenu-title">Витрины</div>
   <div class="sub-list">
     <a class="sub-item" href="https://cloud.kari.com/index.php/s/wDcNPpQK3D7Caog" target="_blank">
@@ -265,11 +266,11 @@
       <span class="sub-icon">📋</span> Регламент <span class="arrow">›</span>
     </a>
   </div>
+  <button class="back-btn" onclick="showMain()">← Назад</button>
 </div>
 
 <!-- SUBMENU: Регламенты -->
 <div id="sub-reglament" class="hidden">
-  <button class="back-btn" onclick="showMain()">← Назад</button>
   <div class="submenu-title">Регламенты</div>
   <div class="sub-list">
     <div class="sub-item disabled">
@@ -297,11 +298,11 @@
       <span class="sub-icon">📸</span> Фотоотчет <span class="arrow">›</span>
     </a>
   </div>
+  <button class="back-btn" onclick="showMain()">← Назад</button>
 </div>
 
 <!-- SUBMENU: Планограммы -->
 <div id="sub-plano" class="hidden">
-  <button class="back-btn" onclick="showMain()">← Назад</button>
   <div class="submenu-title">Планограммы</div>
   <div class="sub-list">
     <a class="sub-item" href="https://cloud.kari.com/index.php/s/MsPE6LzmPB2c7PD" target="_blank">
@@ -323,6 +324,7 @@
       <span class="sub-icon">📁</span> АСС стеллажи пристенные <span class="arrow">›</span>
     </a>
   </div>
+  <button class="back-btn" onclick="showMain()">← Назад</button>
 </div>
 
 <script>
