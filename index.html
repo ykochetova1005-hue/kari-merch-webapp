@@ -93,6 +93,46 @@
     white-space: nowrap;
   }
 
+  .news-section {
+    margin-bottom: 16px;
+  }
+
+  .news-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tg-theme-text-color, #1a1a1a);
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  .news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .news-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #FFF8E1;
+    border-left: 3px solid #FFB300;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .news-date {
+    color: #999;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .news-text {
+    color: var(--tg-theme-text-color, #333);
+  }
+
   .menu-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -232,6 +272,10 @@
     <input type="text" id="search-input" placeholder="Поиск документа..." oninput="onSearch(this.value)">
   </div>
   <div id="search-results" class="search-results hidden"></div>
+  <div id="news-section" class="news-section hidden">
+    <div class="news-title">📢 Новости</div>
+    <div id="news-list" class="news-list"></div>
+  </div>
   <div id="menu-grid" class="menu-grid">
     <a class="menu-btn btn-bulletin" href="https://cloud.kari.com/index.php/s/SmRX3APzGcFc84W" target="_blank">
       <span class="icon">📋</span>
@@ -333,6 +377,23 @@
 </div>
 
 <script>
+  // Load news
+  fetch('news.json?' + Date.now())
+    .then(r => r.json())
+    .then(news => {
+      if (news.length === 0) return;
+      const section = document.getElementById('news-section');
+      const list = document.getElementById('news-list');
+      list.innerHTML = news.map(n =>
+        '<div class="news-item">' +
+          '<span class="news-date">' + n.date + '</span>' +
+          '<span class="news-text">' + n.text + '</span>' +
+        '</div>'
+      ).join('');
+      section.classList.remove('hidden');
+    })
+    .catch(() => {});
+
   // Initialize Telegram Web App — fullscreen
   const tg = window.Telegram && window.Telegram.WebApp;
   if (tg) {
