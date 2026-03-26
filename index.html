@@ -385,11 +385,12 @@
       const section = document.getElementById('news-section');
       const list = document.getElementById('news-list');
       list.innerHTML = news.map(n => {
-        let html = '<div class="news-item">' +
+        const clickAttr = n.nav ? ' onclick="showSub(\'' + n.nav + '\')" style="cursor:pointer;"' : '';
+        let html = '<div class="news-item"' + clickAttr + '>' +
           '<span class="news-date">' + n.date + '</span>' +
           '<span class="news-text">' + n.text;
-        if (n.url) {
-          html += ' <a href="' + n.url + '" target="_blank" style="color:#1565C0;text-decoration:underline;">Открыть</a>';
+        if (n.nav) {
+          html += ' <span style="color:#1565C0;font-weight:600;">→ Открыть</span>';
         }
         html += '</span></div>';
         return html;
@@ -465,7 +466,17 @@
     ).join('');
   }
 
+  const directLinks = {
+    bulletin: 'https://cloud.kari.com/index.php/s/SmRX3APzGcFc84W',
+    akcii: 'https://cloud.kari.com/index.php/s/5jbesD3fMK5QXKo',
+    posm: 'https://cloud.kari.com/index.php/s/8Pj2mmnfrJDxE8d',
+  };
+
   function showSub(id) {
+    if (directLinks[id]) {
+      window.open(directLinks[id], '_blank');
+      return;
+    }
     document.getElementById('search-input').value = '';
     document.getElementById('search-results').classList.add('hidden');
     document.getElementById('search-results').innerHTML = '';
