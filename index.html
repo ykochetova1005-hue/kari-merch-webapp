@@ -528,17 +528,22 @@
   };
 
   function showSub(id) {
+    // Direct link — open in new tab
     if (directLinks[id]) {
       window.open(directLinks[id], '_blank');
       return;
     }
-    document.getElementById('search-input').value = '';
-    document.getElementById('search-results').classList.add('hidden');
-    document.getElementById('search-results').innerHTML = '';
-    document.getElementById('main-menu').classList.add('hidden');
-    document.querySelectorAll('[id^="sub-"]').forEach(el => el.classList.add('hidden'));
-    document.getElementById('sub-' + id).classList.remove('hidden');
-    window.scrollTo(0, 0);
+    // Submenu — show it
+    const subEl = document.getElementById('sub-' + id);
+    if (subEl) {
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-results').classList.add('hidden');
+      document.getElementById('search-results').innerHTML = '';
+      document.getElementById('main-menu').classList.add('hidden');
+      document.querySelectorAll('[id^="sub-"]').forEach(el => el.classList.add('hidden'));
+      subEl.classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
   }
 
   function showMain() {
